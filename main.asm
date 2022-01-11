@@ -21,30 +21,22 @@ main:
     call malloc
     push rax
 
-
     xor rcx, rcx
 begin_init_loop:
 
-    ; Calculate offset
-    mov rax, ListItem_size
-    mul rcx
-    push rax
-
     ; Init values for list item
     mov rax, [rbp - 8]
-    add rax, [rbp - 16]
+    add rax, rcx
     add rax, ListItem.description
     mov qword[rax], hello
     
     mov rax, [rbp - 8]
-    add rax, [rbp - 16]
+    add rax, rcx
     add rax, ListItem.isDone
     mov byte[rax], 0
 
-    pop rax
-
-    inc rcx
-    cmp rcx, 10
+    add rcx, ListItem_size
+    cmp rcx, ListItem_size * 10
     jne begin_init_loop
 
     xor rcx, rcx
