@@ -61,7 +61,6 @@ begin_print_loop:
     pop rcx
     pop rcx
 
-    ; pop rax ; Dealloc index, we don't need it anymore
     add rcx, ListItem_size
     cmp rcx, 10 * ListItem_size
     jne begin_print_loop
