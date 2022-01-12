@@ -1,3 +1,4 @@
+%include "LinkedList.mac"
 
 global main
 

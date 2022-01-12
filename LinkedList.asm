@@ -1,23 +1,9 @@
-%ifndef LinkedList_MODULE
-%define LinkedList_MODULE
+
+%include "LinkedList.mac"
 
 extern malloc
 
 section .text
-
-struc LinkedList
-
-    .head resq 1
-    .tail resq 1
-
-endstruc
-
-struc LinkedListNode
-
-    .next resq 1
-    .data resq 1
-
-endstruc
 
 global ll_create
 ll_create:
@@ -38,5 +24,3 @@ ll_create:
     pop rbp
     mov rsp, rbp
     ret
-
-%endif
