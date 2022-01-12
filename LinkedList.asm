@@ -32,8 +32,7 @@ ll_append:
     push rsi
 
     mov rdi, 0
-    mov rax, qword[rbp - 20o]
-    mov rsi, rax
+    mov rsi, qword[rbp - 20o]
     call ln_create 
     push rax
 
