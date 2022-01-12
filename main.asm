@@ -5,6 +5,9 @@ global main
 extern printf
 extern malloc
 extern ll_create
+extern ln_create
+extern ll_append
+
 
 section .text
 
@@ -19,55 +22,16 @@ main:
     push rbp
     mov rbp, rsp
 
-    mov rdi, ListItem_size * 10
-    call malloc
+    call ll_create
     push rax
 
-    call ll_create
+    mov rdi, qword[rbp - 10o]
+    mov rsi, 69
+    call ll_append
 
-;     xor rcx, rcx
-; begin_init_loop:
-
-;     ; Init values for list item
-;     mov rax, [rbp - 8]
-;     add rax, rcx
-;     add rax, ListItem.description
-;     mov qword[rax], hello
-    
-;     mov rax, [rbp - 8]
-;     add rax, rcx
-;     add rax, ListItem.isDone
-;     mov byte[rax], 0
-
-;     add rcx, ListItem_size
-;     cmp rcx, ListItem_size * 10
-;     jne begin_init_loop
-
-;     xor rcx, rcx
-; begin_print_loop:
-
-;     ; Preserve rcx, push twice to stack align
-;     push rcx
-;     push rcx
-;     mov rdi, item_format
-
-;     mov rsi, [rbp - 8]
-;     add rsi, rcx
-;     add rsi, ListItem.isDone
-;     mov rsi, [rsi]
-
-;     mov rdx, [rbp - 8]
-;     add rdx, rcx
-;     add rdx, ListItem.description
-;     mov rdx, [rdx]
-
-;     call printf
-;     pop rcx
-;     pop rcx
-
-;     add rcx, ListItem_size
-;     cmp rcx, 10 * ListItem_size
-;     jne begin_print_loop
+    mov rdi, qword[rbp - 10o]
+    mov rsi, 420
+    call ll_append
 
     ; Reset stack
     pop rbp

@@ -23,21 +23,46 @@ ll_create:
     ret
 
 global ll_append
-; args: LinkedList*
+; args: LinkedList* list, void* data
 ll_append:
     push rbp
     mov rbp, rsp
 
+    push rdi
+    push rsi
+
+    mov rdi, 0
+    mov rax, qword[rbp - 20o]
+    mov rsi, rax
+    call ln_create 
+    push rax
+
     ; if (linkedList.head == nullptr)
-    cmp qword[rdi + LinkedList.head], 0
+    mov rax, qword[rbp - 10o]
+    mov rax, qword[rax]
+    cmp rax, 0
     jne headless_else
 
+    mov rax, qword[rbp - 10o]
+    mov rbx, qword[rbp - 30o]
+    mov qword[rax], rbx
+    add rax, LinkedList.tail
+    mov qword[rax], rbx
 
-
+    jmp headless_endif
     ; else
 headless_else:
 
+    mov rbx, qword[rbp - 30o]           ; New tail
 
+    mov rax, qword[rbp - 10o]
+    add rax, LinkedList.tail            ; Get pointer to pointer to tail node
+    mov rax, qword[rax]                 ; Get pointer to tail node
+    mov qword[rax], rbx                 ; Dereference pointer to tail node and set it's .next value to the new tail
+    
+    mov rax, qword[rbp - 10o]           ; Set new reference to tail
+    add rax, LinkedList.tail
+    mov qword[rax], rbx
 
 headless_endif:
 
@@ -54,15 +79,15 @@ ln_create:
     push rsi
 
     mov rdi, LinkedListNode_size
-    call malloc                 
+    call malloc                     ; malloc LinkedListNode
     push rax
 
     add rax, LinkedListNode.next
-    mov rbx, qword[rbp - 10o]
+    mov rbx, qword[rbp - 10o]       ; Set LinkedListNode.next
     mov qword[rax], rbx
 
     mov rax, [rbp - 30o] 
-    add rax, LinkedListNode.data
+    add rax, LinkedListNode.data    ; Set LinkedListNode.data
     mov rbx, qword[rbp - 20o]
     mov qword[rax], rbx
     
