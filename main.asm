@@ -1,9 +1,9 @@
-%include "LinkedList.asm"
 
 global main
 
 extern printf
 extern malloc
+extern ll_create
 
 section .text
 
@@ -22,49 +22,51 @@ main:
     call malloc
     push rax
 
-    xor rcx, rcx
-begin_init_loop:
+    call ll_create
 
-    ; Init values for list item
-    mov rax, [rbp - 8]
-    add rax, rcx
-    add rax, ListItem.description
-    mov qword[rax], hello
+;     xor rcx, rcx
+; begin_init_loop:
+
+;     ; Init values for list item
+;     mov rax, [rbp - 8]
+;     add rax, rcx
+;     add rax, ListItem.description
+;     mov qword[rax], hello
     
-    mov rax, [rbp - 8]
-    add rax, rcx
-    add rax, ListItem.isDone
-    mov byte[rax], 0
+;     mov rax, [rbp - 8]
+;     add rax, rcx
+;     add rax, ListItem.isDone
+;     mov byte[rax], 0
 
-    add rcx, ListItem_size
-    cmp rcx, ListItem_size * 10
-    jne begin_init_loop
+;     add rcx, ListItem_size
+;     cmp rcx, ListItem_size * 10
+;     jne begin_init_loop
 
-    xor rcx, rcx
-begin_print_loop:
+;     xor rcx, rcx
+; begin_print_loop:
 
-    ; Preserve rcx, push twice to stack align
-    push rcx
-    push rcx
-    mov rdi, item_format
+;     ; Preserve rcx, push twice to stack align
+;     push rcx
+;     push rcx
+;     mov rdi, item_format
 
-    mov rsi, [rbp - 8]
-    add rsi, rcx
-    add rsi, ListItem.isDone
-    mov rsi, [rsi]
+;     mov rsi, [rbp - 8]
+;     add rsi, rcx
+;     add rsi, ListItem.isDone
+;     mov rsi, [rsi]
 
-    mov rdx, [rbp - 8]
-    add rdx, rcx
-    add rdx, ListItem.description
-    mov rdx, [rdx]
+;     mov rdx, [rbp - 8]
+;     add rdx, rcx
+;     add rdx, ListItem.description
+;     mov rdx, [rdx]
 
-    call printf
-    pop rcx
-    pop rcx
+;     call printf
+;     pop rcx
+;     pop rcx
 
-    add rcx, ListItem_size
-    cmp rcx, 10 * ListItem_size
-    jne begin_print_loop
+;     add rcx, ListItem_size
+;     cmp rcx, 10 * ListItem_size
+;     jne begin_print_loop
 
     ; Reset stack
     pop rbp
