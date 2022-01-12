@@ -1,5 +1,5 @@
-%ifndef LinkedList_MODULE
-%define LinkedList_MODULE
+%ifndef LinkedList_MACRO
+%define LinkedList_MACRO
 
 struc LinkedList
 
