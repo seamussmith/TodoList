@@ -1,6 +1,7 @@
 %include "LinkedList.mac"
 
 extern malloc
+extern free
 
 section .text
 
@@ -18,6 +19,48 @@ ll_create:
     mov qword[rax], 0
     
     pop rax                         ; Pop saved pointer off stack and into return register
+
+    leave
+    ret
+
+global ll_free
+; args: LinkedList*
+ll_free:
+    push rbp
+    mov rbp, rsp
+
+    push rdi
+
+    mov rax, qword[rbp - 10o]
+    mov rax, qword[rax] ; Pointer to first node
+
+    cmp rax, 0
+    je free_loop_end                ; End loop if node is null
+free_loop_start:
+
+    mov rbx, qword[rax]         ; Pointer to next node
+
+    push rax
+    push rbx
+
+    mov rdi, rax                ; Free the node
+    call free
+
+    pop rbx
+    pop rax
+
+    cmp rbx, 0
+    je free_loop_end
+
+    mov rax, rbx                ; Set current pointer to the next node
+    mov rbx, qword[rax]         ; Set next pointer to the current node's next pointer
+
+    jmp free_loop_start
+
+free_loop_end:
+
+    mov rdi, qword[rbp - 10o]       ; Free the head node
+    call free
 
     leave
     ret
