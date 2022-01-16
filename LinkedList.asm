@@ -65,6 +65,80 @@ free_loop_end:
     leave
     ret
 
+global ll_remove
+; args: LinkedList* list, usize index
+ll_remove:
+    push rbp
+    mov rbp, rsp
+
+    push rdi
+    push rsi
+
+    mov rbx, 0
+    mov rax, rdi
+    mov rax, qword[rax]
+    mov rcx, rsi
+remove_loop_start:
+
+    cmp rcx, 0
+    je remove_loop_end
+
+    mov rbx, rax
+    mov rax, qword[rax]
+
+    dec rcx
+    jmp remove_loop_start
+
+remove_loop_end:
+
+    ; Here: rax is the node to be removed, rbx is the node before the node to be removed
+    ; If rbx is nullptr, the node to be removed is the first node
+    ; If the given index is out of bounds, thats undefined behavior ¯\_(ツ)_/¯
+
+    ; If rbx.next is null
+    ; Set list.tail to rbx
+
+    mov rcx, qword[rbp - 10o]
+
+    cmp qword[rax], 0 ; rax.next
+    jne list_tail_check_end
+
+    mov qword[rcx + LinkedList.tail], rbx
+
+list_tail_check_end:
+
+    ; If rbx is null
+    ; Set list.head to the next node for rax.next
+
+    cmp rbx, 0
+    jne list_head_check_end
+
+    mov rdx, qword[rax]
+    mov qword[rcx + LinkedList.head], rdx
+
+    mov rdi, rax
+    call free
+
+    ; We no longer have a reference to the node. Horray!
+    jmp list_removal_done
+
+list_head_check_end:
+
+    ; rbx cant be null here
+
+    ; INITIATE SWAPPY SWAP
+    mov rcx, qword[rax]     ; Set the next pointer for rbx.next to rax.next, effectively removing rax from list
+    mov qword[rbx], rcx
+
+    ; GO FREE, MY POINTER
+    mov rdi, rax
+    call free
+
+list_removal_done:
+
+    leave
+    ret
+
 global ll_append
 ; args: LinkedList* list, void* data
 ll_append:
