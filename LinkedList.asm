@@ -185,6 +185,31 @@ headless_endif:
     leave
     ret
 
+global ll_get
+; args: LinkedList* list, usize index 
+ll_get:
+    push rbp
+    mov rbp, rsp
+
+    mov rax, qword[rdi]
+    mov rcx, rsi
+index_loop_start:
+
+    cmp rcx, 0
+    je index_loop_end
+
+    mov rax, qword[rax]
+
+    dec rcx
+    jmp index_loop_start
+
+index_loop_end:
+
+    mov rax, [rax + LinkedListNode.data]
+
+    leave
+    ret
+
 global ln_create
 ; args: void* next, void* data 
 ln_create:
